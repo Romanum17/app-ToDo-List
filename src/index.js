@@ -1,45 +1,64 @@
-const express = require("express");
-const morgan = require("morgan");
+const express = require('express');
+const morgan = require('morgan');
+const path = require('path');
 const {engine} = require('express-handlebars');
-const path = require("path");
+const session = require('express-session');
+const validator = require('express-validator');
+const passport = require('passport');
+const flash = require('connect-flash');
+const MySQLStore = require('express-mysql-session')(session);
+const bodyParser = require('body-parser');
 
-// inicializaciones
+const { database } = require('./keys');
+
+// Intializations
 const app = express();
+require('./lib/passport');
 
-//configuraciones
-app.set("port", process.env.PORT  || 4000);
-app.set("views", path.join(__dirname, "views"));
-app.engine(".hbs", engine({
-    defaultLayout: "main",
-    layoutsDir: path.join(app.get("views"), "layouts"),
-    partialsDir: path.join(app.get("views"), "partials"),
-    extname: ".hbs",
-    helpers: require("./lib/handlebars.js")
+// Settings
+app.set('port', process.env.PORT || 4000);
+app.set('views', path.join(__dirname, 'views'));
+app.engine('.hbs', engine({
+  defaultLayout: 'main',
+  layoutsDir: path.join(app.get('views'), 'layouts'),
+  partialsDir: path.join(app.get('views'), 'partials'),
+  extname: '.hbs',
+  helpers: require('./lib/handlebars')
+}))
+app.set('view engine', '.hbs');
+
+// Middlewares
+app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
+app.use(session({
+  secret: 'faztmysqlnodemysql',
+  resave: false,
+  saveUninitialized: false,
+  store: new MySQLStore(database)
 }));
-app.set("view engine", ".hbs");
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 
-//FUNCIONES QUE SE EJECUTAN CUANDO SE PIDE UNA PETICION
-app.use(morgan("dev"));
-app.use(express.urlencoded({extended: false}));
-app.use(express.json());
-
-//variables globales
-app.use((req, res, next)  =>{
-    next();
+// Global variables
+app.use((req, res, next) => {
+  app.locals.message = req.flash('message');
+  app.locals.success = req.flash('success');
+  app.locals.user = req.user;
+  next();
 });
 
+// Routes
+app.use(require('./routes/index'));
+app.use(require('./routes/authentication'));
+app.use('/links', require('./routes/links'));
 
-//rutas 
-app.use(require("./routes/index.js"));
-app.use(require("./routes/authentication.js"));
-app.use("/links", require("./routes/links.js"));
+// Public
+app.use(express.static(path.join(__dirname, 'public')));
 
-//archivos publicos
-app.use(express.static(path.join(__dirname, "public")));
-
-// iniciar servidor
-
-app.listen(app.get("port"), () =>{
-    console.log("Servidor en el puerto", app.get("port"));
+// Starting
+app.listen(app.get('port'), () => {
+  console.log('Server is in port', app.get('port'));
 });
-
