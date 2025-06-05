@@ -1,8 +1,12 @@
 body {
-    background: #f5f6fa;
-font-family: 'Oswald', sans-serif;
-
+    background: #ffffff;
+    font-family: 'Oswald', sans-serif;
     overflow: hidden;
+    background: url('/img/fondoform.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
 }
 
 .index {
@@ -29,6 +33,7 @@ font-family: 'Oswald', sans-serif;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+    
 }
 
 .masthead h1 {
@@ -44,4 +49,54 @@ font-family: 'Oswald', sans-serif;
     .masthead h1 {
       font-size: 5.5rem;
     }
+  }
+
+  h3{
+    color: black;
+    padding: 15px;
+    text-shadow: 2px 2px 2px white;
+
+  }
+
+  input{
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 20px;
+    font-size: 20px;
+    padding: 8px 40px 8px 10px;
+    border: none;
+    box-shadow: 0 2px 4px 3px rgb(142, 200, 248);
+  }
+
+ .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: inset -6px -6px rgba(0, 0, 0, 0.5);
+
+  }
+
+ h5 {
+    text-transform: uppercase;
+    margin-top: 0;
+    text-align: center;
+    font-size: 30px;
+    border-bottom: 3px solid rgb(230, 146, 21);
+  }
+
+  textarea{
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 20px;
+    font-size: 20px;
+    padding: 8px 40px 8px 10px;
+    border: none;
+    box-shadow: 0 2px 4px 3px rgb(142, 200, 248);
   }

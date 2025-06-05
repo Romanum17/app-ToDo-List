@@ -13,7 +13,7 @@ const { database } = require('./keys');
 
 // Intializations
 const app = express();
-require('./lib/passport');
+require('./lib/passport.js');
 
 // Settings
 app.set('port', process.env.PORT || 4000);
